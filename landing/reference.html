@@ -501,5 +501,12 @@ ls artifacts/
   </footer>
 
   <script src="script.js"></script>
+
+<section class="section" id="personal-fork"><h2>Personal fork package</h2>
+<p>This personal fork adds an opt-in pinned CLIProxyAPI v7.3.20 GPT-6.1-Sol catalog patch. Upstream commands and presets remain unchanged.</p>
+<p><code>claude-gpt</code> keeps the current project directory, uses separate state in <code>~/.local/share/claude-dialects-personal/state/</code>, and leaves the shared proxy running after a session exits. <code>claude-gpt stop</code> stops it for all personal sessions. Existing Claude and trial state are preserved.</p>
+<p>The reviewed trial supplies a seven-model picker; the default is GPT-6-Sol, medium effort and 272,000 context tokens. Expanded context and fast or priority mode are not enabled. The proxy does not enforce an output-token limit from the Anthropic request.</p>
+<p>Use <code>claude-gpt --project DIRECTORY</code> to select a project, <code>claude-gpt manage ...</code> for administration, or <code>claude-gpt sync-settings --source /path/to/settings.json</code> to merge common settings and skill directory links. Skills may require external tools.</p>
+<p>Versioned packages live under <code>~/.local/opt/claude-dialects-personal/releases/</code>, selected by <code>current</code>. See the fork README and operation document for build, installation and rollback.</p></section>
 </body>
 </html>

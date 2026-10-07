@@ -1625,3 +1625,26 @@ Claude Dialects is available under the [MIT License](LICENSE).
 - [MAI-Code-1.1-Flash announcement](https://github.blog/changelog/2026-08-11-mai-code-1-1-flash-available-in-github-copilot/)
 - [MiniMax Anthropic-compatible API](https://platform.minimax.io/docs/api-reference/text-anthropic-api)
 - [DeepSeek API documentation](https://api-docs.deepseek.com/)
+
+## Personal fork package
+
+This fork adds an opt-in personal build with the pinned CLIProxyAPI v7.3.20
+GPT-6.1-Sol catalog patch. Upstream commands and presets remain unchanged.
+See [personal operation](docs/fork-maintenance.md) for branch, build, installation
+and rollback rules. The wrapper `claude-gpt` uses a separate personal state root,
+keeps the caller's project directory, and leaves its shared proxy running when a
+session exits. Use `claude-gpt stop` explicitly; this ends the proxy for all
+personal sessions. Existing `claude` and trial state are preserved.
+
+The default remains GPT-6-Sol, medium effort and 272,000 context tokens. The
+7-model picker is copied from the reviewed trial configuration. Common user
+settings and directory-based skills can be reapplied with
+`claude-gpt sync-settings --source /path/to/settings.json`. Skill availability
+does not install the tools each skill requires. The proxy does not enforce an
+output-token limit from the Anthropic request. Expanded context and fast or
+priority mode are not enabled by this setup.
+
+State: `~/.local/share/claude-dialects-personal/state/`; packages:
+`~/.local/opt/claude-dialects-personal/releases/`; selection: `current`.
+`claude-gpt --project DIRECTORY` selects a project; `claude-gpt manage ...`
+passes administrative commands through to `cc-dialect`.

@@ -5,3 +5,4 @@
 /internal/app/dashboard/node_modules/
 /internal/app/dashboard/coverage/
 /.local/
+/scripts/personal/__pycache__/
