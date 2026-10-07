@@ -1,0 +1,9 @@
+{
+  "module": "github.com/router-for-me/CLIProxyAPI/v7",
+  "version": "v7.3.20",
+  "file": "internal/registry/models/models.json",
+  "before_sha256": "3efff25d86e6bba951560bd16049c9af8923912b46bcd5ae6db27c56e4e37b87",
+  "after_sha256": "21c209dc3af65ce7687d7de304602e1d5609ccb8e02e44295398c5eb332dc84a",
+  "patch_sha256": "7e9a90d38d19ccd93dcad6f66e5cf0f2da5b7b9b11d52ef780670c6b29df8155",
+  "catalog_reference": "https://github.com/router-for-me/CLIProxyAPI/blob/v8.0.17/internal/registry/models/models.json"
+}
