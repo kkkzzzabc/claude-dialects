@@ -161,3 +161,26 @@ upstream 기여는 CONTRIBUTING.md의 accepted issue 절차를 따르며, 별도
 5. 검증·통합: 검사 결과를 기록하고 `dialects/custom`에 통합합니다.
 6. 승격: 데이터 이전·운영 패키지 설치·`claude-gpt` 등록·복귀 확인을 수행합니다.
 7. 정리: 정상 사용 확인 후 임시 환경의 보존·삭제를 결정합니다.
+
+## 개인용 도구 실행 절차
+
+기존 Go 실행 파일을 명시하며 도구를 자동 설치하지 않습니다. 작업 폴더는 저장소 밖에 둡니다.
+
+```sh
+python3 scripts/personal/build.py --go /path/to/go --work-dir /path/to/build-work --check
+python3 scripts/personal/install.py --package /path/to/build-work/package --trial /path/to/trial
+```
+
+첫 명령은 고정 모듈과 패치를 검증하고 Go 테스트·vet·패키지 빌드를 수행합니다.
+두 번째 명령은 패키지·데이터를 준비하지만 `current`와 사용자 명령은 아직 만들지 않습니다.
+준비된 release의 runtime.py로 실제 검증한 뒤, 패키지 바이너리 SHA256과 검사 성공을 담은
+validation.json을 지정하여 같은 설치 명령에 `--activate --validation /path/to/validation.json`을 추가합니다.
+설정 재적용은 `claude-gpt sync-settings --source /path/to/settings.json`입니다.
+인증 파일은 원본 trial에서 복사하며 프록시는 별도 포트 43171을 사용합니다. trial을 동시에
+실행하면 두 환경에서 같은 서버 인증을 갱신할 수 있으므로 승격 후에는 정식 명령을 사용합니다.
+
+복귀 전에는 모든 GPT 세션을 종료하고 `claude-gpt stop`으로 프록시를 중지합니다.
+이후 `current`를 직전 정상 release로 연결하고 재실행합니다. 최초 승격의 복귀 수단은 보존한 trial입니다.
+개인 패키지를 제거하려면 프록시를 중지한 뒤 이 설치가 만든 `~/.local/bin/claude-gpt` 링크와
+`~/.local/opt/claude-dialects-personal`을 제거합니다. 운영 데이터와 빌드 캐시는 별도로 남기며,
+삭제가 필요할 때 영향과 백업을 확인합니다. 원본 공통 설정·스킬·일반 Claude는 제거하지 않습니다.
