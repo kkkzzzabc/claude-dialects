@@ -107,3 +107,17 @@ cd landing && python3 -m http.server 8765
 | `README.md` | Canonical user documentation |
 | `THIRD_PARTY_NOTICES.md` | Embedded dependency licenses |
 | `SECURITY.md` | Vulnerability reporting |
+
+## Personal fork operation
+
+Read [docs/fork-maintenance.md](docs/fork-maintenance.md) before working on this
+personal fork. `main` preserves upstream; `dialects/custom` is the only personal
+integration branch. Create feature branches from it and target
+`kkkzzzabc/claude-dialects: dialects/custom` explicitly for personal PRs.
+Check worktrees and follow-up commits before changing branches. Preserve shared
+history and known-good tags; do not force-push. Use `type: English summary` commit
+messages without a scope. Keep credentials, state, caches and binaries outside
+the repository. Explain build/test/CLI execution before running it and follow
+the user's existing authorization. Do not automatically install tools or change
+global shell configuration. Source integration and installed package validation
+are distinct milestones.
