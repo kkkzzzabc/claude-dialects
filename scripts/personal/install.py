@@ -41,6 +41,10 @@ def main():
             parser.error('Existing release differs; do not overwrite it')
     else:
         shutil.copytree(package, release)
+    for line in (package / 'SHA256SUMS').read_text().splitlines():
+        checksum, name = line.split('  ', 1)
+        if digest(release / name) != checksum:
+            parser.error('Installed release checksum mismatch')
     (opt / '.personal-marker').touch(mode=0o600)
     if not (data / 'state').exists():
         if args.trial is None:
