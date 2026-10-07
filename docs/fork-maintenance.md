@@ -7,7 +7,7 @@
 이번에는 개인 사용을 위한 관리 체계만 정합니다. 공개 패키지 배포·웹사이트 호스팅·
 자동 upstream 반영·CLIProxyAPI의 추가 포크는 범위에 포함하지 않습니다.
 
-## 현재 준비 상태
+## 초기 준비 기록
 
 | 항목 | 확인 결과 |
 | --- | --- |
@@ -18,7 +18,7 @@
 | `upstream` | 원본 저장소 |
 | 초기 기준 SHA | `eac861273a7787eec394299f25cc7a6653f2036b` |
 | 원본 동일성 | 복제 시 `main`·`origin/main`·`upstream/main`이 같은 SHA |
-| 현재 로컬 작업 브랜치 | `dialects/plan/fork-maintenance` — 이 운영안만 작성 |
+| 초기 로컬 작업 브랜치 | `dialects/plan/fork-maintenance` — 최초 운영안 작성 |
 | GitHub 기본 브랜치 | `main` |
 | upstream 버전 기준 | 공개 릴리스·태그가 없어 초기에는 검증한 SHA를 고정 |
 | 임시 시험 환경 | `~/.local/share/claude-dialects-trial` — 그대로 보존 |
@@ -155,12 +155,12 @@ upstream 기여는 CONTRIBUTING.md의 accepted issue 절차를 따르며, 별도
 ## 단계별 진행 제안
 
 1. 완료: 개인 포크 생성, 지정 폴더 복제, 두 원격 연결, 원본 SHA 동일성 확인.
-2. 현재: 이 운영안과 브랜치 역할을 논의합니다. 문서만 작성하며 코드 적용·빌드·설치는 하지 않습니다.
-3. 합의 후: `dialects/custom`을 준비하고 운영 지침을 기록합니다.
-4. 작업 브랜치: `dialects/feat/trial-promotion`에서 임시 작업을 목적별 변경으로 이전합니다.
-5. 검증·통합: 검사 결과를 기록하고 `dialects/custom`에 통합합니다.
-6. 승격: 데이터 이전·운영 패키지 설치·`claude-gpt` 등록·복귀 확인을 수행합니다.
-7. 정리: 정상 사용 확인 후 임시 환경의 보존·삭제를 결정합니다.
+2. 완료: 사용자 승인으로 운영안과 브랜치 역할을 확정했습니다.
+3. 완료: `dialects/custom`을 준비하고 운영 지침을 기록했습니다.
+4. 완료: `dialects/feat/trial-promotion`에서 임시 작업을 목적별 커밋으로 이전했습니다.
+5. 완료: 검증한 변경을 `dialects/custom`에 merge commit으로 통합했습니다.
+6. 완료: 데이터 이전·운영 패키지 설치·`claude-gpt` 등록·복귀 확인을 수행했습니다.
+7. 보존: 원본 trial은 삭제하지 않았습니다. 이후 사용 확인과 별도 요청에 따라 정리합니다.
 
 ## 개인용 도구 실행 절차
 
@@ -180,7 +180,50 @@ validation.json을 지정하여 같은 설치 명령에 `--activate --validation
 실행하면 두 환경에서 같은 서버 인증을 갱신할 수 있으므로 승격 후에는 정식 명령을 사용합니다.
 
 복귀 전에는 모든 GPT 세션을 종료하고 `claude-gpt stop`으로 프록시를 중지합니다.
-이후 `current`를 직전 정상 release로 연결하고 재실행합니다. 최초 승격의 복귀 수단은 보존한 trial입니다.
+이후 `current`를 직전 정상 release로 연결하고 재실행합니다. 최초 승격에는 원본 trial 바이너리를
+복사한 `releases/trial-fallback-eac8612-gpt61` 패키지도 보존했습니다. 같은 운영 데이터를 사용하여
+원본 trial의 OAuth 복사본을 갱신하지 않고 실행 파일만 복귀할 수 있습니다.
 개인 패키지를 제거하려면 프록시를 중지한 뒤 이 설치가 만든 `~/.local/bin/claude-gpt` 링크와
 `~/.local/opt/claude-dialects-personal`을 제거합니다. 운영 데이터와 빌드 캐시는 별도로 남기며,
 삭제가 필요할 때 영향과 백업을 확인합니다. 원본 공통 설정·스킬·일반 Claude는 제거하지 않습니다.
+
+## 2026-10-07 최초 승격 결과
+
+| 항목 | 결과 |
+| --- | --- |
+| 개인용 통합 브랜치 | `dialects/custom`; GitHub 기본 브랜치는 `main` 유지 |
+| 검증·설치 소스 SHA | `b06649c6c28e39dcbe41375e4ac4ecf0832083f2` |
+| 정상 태그 | `personal-good-20261007-01` — 검증·설치 소스를 고정 |
+| 버전 | `personal.1+eac8612` |
+| 활성 패키지 | `~/.local/opt/claude-dialects-personal/releases/personal.1+eac8612-b06649c6c2` |
+| 실행 파일 SHA256 | `35d675d4c97024ea61e3a4a538ead9e0245b2007422ffd7aee4862e5e8480919` |
+| 운영 데이터 | `~/.local/share/claude-dialects-personal/state`; 프록시 포트 43171 |
+| 기본 설정 | GPT-6-Sol, medium effort, 272,000 컨텍스트, viewMode default |
+| 설정·이력 이전 | 설정을 제외한 일반 파일 554개와 인증 파일 1개가 복사 직후 원본과 일치 |
+| 모델·스킬 | 메뉴 7개 모두 프록시 목록에 존재. 사용자 지침과 스킬 16개 인식 |
+| 기존 Claude | 새 로그인 셸에서도 `/opt/homebrew/bin/claude`; 변경하지 않음 |
+| 설치 기록 | 운영 데이터 루트의 `personal-install.json`, 패키지의 `build-manifest.json`·`SHA256SUMS` |
+| 검증 로그 | `~/.cache/claude-dialects-personal-build/` 아래 검사·빌드·요청 JSON과 validation.json |
+
+Go 테스트·vet·포맷과 Python 검사 4개가 통과했습니다. 독립 소스 복제본과 기본 작업 폴더에서
+같은 소스 SHA를 빌드한 바이너리 SHA256이 일치했습니다. 첫 Go 검사는 `780ff77`에서 수행했고,
+이후 설치 도구·검사·문서만 변경했으며 Go 소스·go.mod·go.sum은 동일합니다.
+패치 적용본은 원본 모듈과 전체 파일 체크섬을 비교해 카탈로그 한 파일 외 변경이 없음을 확인했습니다.
+Go 의존성 버전·라이선스와 frontend 잠금 파일·내장 산출물은 변경하지 않았습니다.
+THIRD_PARTY_NOTICES는 기존 의존성의 라이선스를 유지하며 패치 출처는 manifest에 기록합니다.
+
+GPT-6-Sol의 짧은 요청과 GPT-6.1의 Read 도구 요청을 동시에 실행해 기대 응답을 확인했습니다.
+프록시는 두 세션 종료 후에도 같은 PID로 유지됐습니다. 복사한 기존 대화 UUID를 GPT-6.1로
+재개해 기대 응답을 확인했습니다. 총 실제 모델 요청은 3회이며 검증 JSON은 인증 내용을 포함하지 않습니다.
+복귀용 패키지 선택·버전·컨텍스트·GPT-6.1 목록 확인 후 개인용 패키지로 재전환했습니다.
+복귀용 패키지에서 모델 생성 요청을 추가로 실행하지는 않았습니다.
+검증에 사용한 프록시는 종료했으며 다음 `claude-gpt` 실행 시 자동 시작합니다.
+
+공식 Claude 설정·workspace 설정 원본·지침·셸 설정·trial 설정의 해시가 이전과 일치합니다.
+원본 trial과 캐시를 보존했습니다. full-screen UI·원격 제어·개별 스킬 기능·대용량 토큰 경계는
+이번 검사에 포함하지 않았으며, frontend와 플랫폼 Go 코드 변경이 없어 dashboard·cross-build를 재실행하지 않았습니다.
+Go의 로컬 모듈 교체 때문에 버전 출력의 embedded CLIProxyAPI는 `(devel)`로 보이지만,
+실제 의존성 기준 v7.3.20과 모듈 체크섬·패치 체크섬은 build-manifest에 고정했습니다.
+
+이후 운영 기록 커밋은 설치된 실행 파일을 바꾼 것으로 보지 않습니다.
+새 소스를 빌드·설치할 때는 개인 버전을 증가시키고 다시 검증합니다.
